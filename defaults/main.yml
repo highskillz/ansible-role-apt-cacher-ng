@@ -1,3 +1,10 @@
 ---
 # defaults file for apt-cacher-ng
 apt-cacher-ng_setup_ufw: True
+
+apt-cacher-ng_port: 3142
+
+apt_cache_setup_server: False
+apt_cache_host: "127.0.0.1"
+#apt_cache_host: 'cache.{{ ansible_domain }}'
+

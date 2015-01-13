@@ -6,6 +6,17 @@
 - name: Enable apt-cacher-ng on boot
   service: name=apt-cacher-ng state=started enabled=yes
 
-- name: Allow apt-cacher-ng on port 3142 (Firewall)
-  ufw: rule=allow port=3142 proto=tcp
-  when: apt-cacher-ng_setup_ufw
+- name: Allow apt-cacher-ng port on (Firewall)
+  ufw: rule=allow port={{ apt-cacher-ng_port }} proto=tcp
+  when: (apt-cacher-ng_setup_ufw) and (apt-cacher-ng_port is defined)
+
+- name: Configure APT to use cache server if available
+  template: 
+    src=000apt-cacher-ng-proxy.j2
+    dest=/etc/apt/apt.conf.d/000apt-cacher-ng-proxy
+    owner=root group=root mode=0644
+  when:
+    apt-cacher-ng_port is defined and 
+    apt_cache_host is defined
+    apt_cache_setup_server is defined and apt_cache_setup_server and
+
